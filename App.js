@@ -5,11 +5,20 @@ import PropTypes from 'prop-types';
 
 import Item from './Item';
 
+// const deleteItem = (id, data) => {
+//   const newData = data.reduce((a, b) => {
+//     if (b.id !== id) {
+//       a.push(b);
+//       return a;
+//     }
+//   }, []);
 
+//   return newData;
+// };
 
 export default function App() {
 
-  // Object.keys(data): id, subject, text
+  // Object.keys(data): id, subject, text, status
   const [data, setData] = useState([]);
 
   const handlePress = () => {
@@ -27,21 +36,26 @@ export default function App() {
     if (status) {
       newData[id].status = status;
     }
+    // if (cancel) {
+    // const newerData = deleteItem(id, newData);
+    // setData(newerData);
+    // return;
+    // }
     setData(newData);
   }
 
   return (
     <View style={styles.container}>
-      <Text>Todo List App</Text>
+      <Text style={styles.title}>Todo List App</Text>
       <TouchableWithoutFeedback onPress={handlePress}>
-        <Text>+</Text>
+        <Text style={styles.addNew}>+</Text>
       </TouchableWithoutFeedback>
-      {data.map((data, index) => {
-        return (
+      {data.map((item, index) => {
+        return item.status === 'cancelled' || (
           <Item
             key={index}
             id={index}
-            data={data}
+            data={item}
             onChange={handleChange}
           />
         )
@@ -61,4 +75,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  title: {
+    fontSize: '2rem',
+  },
+  addNew: {
+    paddingHorizontal: '1.5rem',
+    paddingTop: '1rem',
+    paddingBottom: '1.3rem',
+    border: '1px solid #000',
+    fontSize: '1.5rem',
+  }
 });

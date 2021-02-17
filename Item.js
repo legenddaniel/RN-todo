@@ -18,12 +18,19 @@ function Item({ id, data, onChange }) {
         });
     };
 
-    const handlePress = () => {
+    const handleAddPress = () => {
         onChange({
             id: id,
             status: 'done'
         });
-    }
+    };
+
+    const handleCancelPress = () => {
+        onChange({
+            id: id,
+            status: 'cancelled'
+        });
+    };
 
     let content;
     switch (status) {
@@ -32,14 +39,24 @@ function Item({ id, data, onChange }) {
                 <>
                     <TextInput
                         placeholder="subject"
-                        value={subject}
+                        value={subject || ''}
                         onChangeText={handleSubjectChange}
+                        style={styles.input}
                     />
                     <TextInput
                         placeholder="text"
-                        value={text}
+                        value={text || ''}
                         onChangeText={handleTextChange}
+                        style={styles.input}
                     />
+                    <View style={styles.editButtons}>
+                        <TouchableWithoutFeedback onPress={handleAddPress}>
+                            <Text>Add</Text>
+                        </TouchableWithoutFeedback>
+                        <TouchableWithoutFeedback onPress={handleCancelPress}>
+                            <Text>Cancel</Text>
+                        </TouchableWithoutFeedback>
+                    </View>
                 </>
             );
             break;
@@ -48,6 +65,9 @@ function Item({ id, data, onChange }) {
                 <>
                     <Text>{subject || 'You did not input anything'}</Text>
                     <Text>{text || 'You did not input anything'}</Text>
+                    <TouchableWithoutFeedback onPress={handleCancelPress}>
+                        <Text>Delete</Text>
+                    </TouchableWithoutFeedback>
                 </>
             );
             break;
@@ -59,7 +79,6 @@ function Item({ id, data, onChange }) {
     return content && (
         <View>
             {content}
-            <Button title="Add" onPress={handlePress} />
         </View>
     )
 }
@@ -72,6 +91,20 @@ Item.propTypes = {
         status: string.isRequired,
     }),
     onChange: func.isRequired
-}
+};
+
+const styles = StyleSheet.create({
+    editButtons: {
+        flexDirection: 'row',
+
+    },
+    input: {
+        padding: '0.5rem',
+        borderBottomColor: 'grey',
+        borderBottomWidth: 1,
+        textAlign: 'center',
+    }
+});
+
 
 export default Item;
